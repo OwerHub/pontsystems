@@ -1,0 +1,15 @@
+[
+    {
+        "title": "Mr",
+        "lastName": "Doe",
+        "firstName": "John",
+        "middleName": "Smith",
+        "gender": "male",
+        "maidenName": null,
+        "placeOfBirth": "Budapest",
+        "dateOfBirth": "1990-01-01",
+        "nationality": "American",
+        "taxIdentifier": "USA123456789",
+        "creditEligible": true
+    }
+]
