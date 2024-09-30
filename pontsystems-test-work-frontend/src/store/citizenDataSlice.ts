@@ -6,6 +6,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 //const dummyCitizensData = dummyCitizens as CitizenRegistration[];
 const dummyCitizensData = [
     {
+        id: 1,
         title: 'Mr',
         lastName: 'Doe',
         firstName: 'John',
@@ -19,6 +20,7 @@ const dummyCitizensData = [
         creditEligible: true,
     },
     {
+        id:2,
         title: 'Mr',
         lastName: 'jane',
         firstName: 'John',
@@ -36,6 +38,7 @@ const dummyCitizensData = [
 
 
 export interface CitizenRegistration {
+    id: number; // Azonosító (number - required, unique)
     title: string; // Titulus (select - required)
     lastName: string; // Vezetéknév (text - required)
     firstName: string; // Keresztnév (text - required)
