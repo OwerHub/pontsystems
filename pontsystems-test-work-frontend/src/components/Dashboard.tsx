@@ -1,15 +1,23 @@
-import React from "react";
+import { useState } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 //import { RootState, AppDispatch } from "../store/store";
 import { RootState } from "../store/store";
 import { Table, Space, Button } from "antd";
-import deleteRowIcon from "../assets/delete-row.svg";
-import editRowIcon from "../assets/edit-row.svg";
-import viewRowIcon from "../assets/view-close-row.svg";
+import DeleteModal from "./DeleteModal";
+import { deleteIcon, editIcon, viewIcon } from "../assets";
+import { CitizenRegistrationData } from "../store/citizenDataSlice";
 
 function Dashboard() {
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
   const citizens = useSelector((state: RootState) => state.citizenData.data);
+
+  // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
+
+  const handleDeleteButton = (id: number) => {
+    console.log("delete", id);
+  };
 
   const columns = [
     {
@@ -70,17 +78,20 @@ function Dashboard() {
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (_, record: CitizenRegistrationData) => (
         <Space size="middle">
           <a>
-            <img style={{ height: "1rem" }} src={viewRowIcon} alt="View" />
+            <img style={{ height: "1rem" }} src={viewIcon} alt="View" />
           </a>
           <a>
-            <img style={{ height: "1rem" }} src={editRowIcon} alt="Edit" />
+            <img style={{ height: "1rem" }} src={editIcon} alt="Edit" />
           </a>
-          <a>
-            <img style={{ height: "1rem" }} src={deleteRowIcon} alt="Delete" />
-          </a>
+          <div
+            style={{ height: "1rem", width: "1rem", cursor: "pointer" }}
+            onClick={() => handleDeleteButton(record.id)}
+          >
+            <img style={{ height: "1rem" }} src={deleteIcon} alt="Delete" />
+          </div>
         </Space>
       ),
     },
@@ -97,6 +108,9 @@ function Dashboard() {
         <Table columns={columns} dataSource={citizens} rowKey="id" />
       ) : (
         <p>No citizens found</p>
+      )}
+      {isDeleteModalVisible && (
+        <DeleteModal id="1" setModalVisible={setIsDeleteModalVisible} />
       )}
     </div>
   );
