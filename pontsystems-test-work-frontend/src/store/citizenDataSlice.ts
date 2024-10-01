@@ -138,7 +138,7 @@ const citizenSlice = createSlice({
             state.data.push(action.payload);
         },
         removeCitizen: (state, action: PayloadAction<number>) => {
-            state.data.splice(action.payload, 1);
+            state.data = state.data.filter(citizen => citizen.id !== action.payload);
         },
     },
     extraReducers(builder) {

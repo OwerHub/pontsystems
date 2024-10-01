@@ -1,22 +1,25 @@
 import { useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+// import { useSelector } from "react-redux";
 //import { RootState, AppDispatch } from "../store/store";
 import { RootState } from "../store/store";
 import { Table, Space, Button } from "antd";
-import DeleteModal from "./DeleteModal";
+// import DeleteModal from "./DeleteModal";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
 import { CitizenRegistrationData } from "../store/citizenDataSlice";
+import { openModal } from "../store/modalSlice";
+import ModalWrapper from "../components/ModalWrapper";
 
 function Dashboard() {
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  // const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const citizens = useSelector((state: RootState) => state.citizenData.data);
-
+  const modalData = useSelector((state: RootState) => state.modalData);
+  const dispatch = useDispatch();
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
-  const handleDeleteButton = (id: number) => {
-    console.log("delete", id);
+  const handleDeleteButton = (citizen: CitizenRegistrationData) => {
+    dispatch(openModal({ type: "delete", citizen: citizen }));
   };
 
   const columns = [
@@ -88,7 +91,7 @@ function Dashboard() {
           </a>
           <div
             style={{ height: "1rem", width: "1rem", cursor: "pointer" }}
-            onClick={() => handleDeleteButton(record.id)}
+            onClick={() => handleDeleteButton(record)}
           >
             <img style={{ height: "1rem" }} src={deleteIcon} alt="Delete" />
           </div>
@@ -109,9 +112,7 @@ function Dashboard() {
       ) : (
         <p>No citizens found</p>
       )}
-      {isDeleteModalVisible && (
-        <DeleteModal id="1" setModalVisible={setIsDeleteModalVisible} />
-      )}
+      {modalData.visible && modalData.type === "delete" && <ModalWrapper />}
     </div>
   );
 }
