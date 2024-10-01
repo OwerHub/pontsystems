@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { ICitizenRegistrationData } from "../types";
 // import dummyCitizens from './dummyCitizens.json';
 
 
@@ -89,28 +90,10 @@ const dummyCitizensData = [
         taxIdentifier: 'USA789456123',
         creditEligible: false,
     }
-] as CitizenRegistrationData[];
-
-
-
-export interface CitizenRegistrationData {
-    id: number; //  (number - required, unique)
-    title: string; //  (select - required)
-    lastName: string; //  (text - required)
-    firstName: string; // (text - required)
-    middleName: string | null; // (text - required)
-    gender: 'male' | 'female' | 'other'; //  (select - required)
-    maidenName?: string | null; //  (text - required if gender is 'female')
-    placeOfBirth: string; //  (text - required)
-    dateOfBirth: string; //  (datepicker - required)
-    nationality: string; //  (text - required)
-    taxIdentifier: string; //  (string - 11 characters long, must contain '8' and at least one '2')
-    creditEligible?: boolean; //  (select - fixed disabled) 
-    //dateOfBirth: Date; // Születési dátum (datepicker - required)
-}
+] as ICitizenRegistrationData[];
 
 interface CitizenDataState {
-    data: CitizenRegistrationData[];
+    data: ICitizenRegistrationData[];
      isLoading: boolean;
     error: string | null;
 }
@@ -124,17 +107,17 @@ const initialState: CitizenDataState = {
 export const fetchCitizens = createAsyncThunk("habits/fetchCitizens", async () => {
     // Simulating an API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const mockCitizens: CitizenRegistrationData[] = dummyCitizensData;
+    const mockCitizens: ICitizenRegistrationData[] = dummyCitizensData;
     return mockCitizens;
   });
-
-
 
 const citizenSlice = createSlice({
     name: 'citizenData',
     initialState,
     reducers: {
-        addCitizen: (state, action: PayloadAction<CitizenRegistrationData>) => {
+        addCitizen: (state, action: PayloadAction<ICitizenRegistrationData>) => {
+            const newId = state.data.length > 0 ? Math.max(...state.data.map(citizen => citizen.id)) + 1 : 1;
+            action.payload.id = newId;
             state.data.push(action.payload);
         },
         removeCitizen: (state, action: PayloadAction<number>) => {

@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
 import axios from "axios";
+import {
+  addCitizen as addCitizenReducer,
+  removeCitizen as removeCitizenReducer,
+} from "../store/citizenDataSlice";
+import { ICitizenRegistrationData } from "../types";
 
-interface IuseAxiosProps {
+export interface IuseAxiosProps {
   url: string;
   method: "get" | "post" | "put" | "delete";
-  payLoad?: any;
-  fake;
+  payLoad?: { id?: string; citizen?: ICitizenRegistrationData };
 }
 
-function useAxios<T>(url: string, method: "get" | "post" | "put" | "delete") {
-  const [data, setData] = useState<T | null>(null);
+export function useAxios(props: IuseAxiosProps) {
+  const { url, method, payLoad } = props;
+
+  const [data, setData] = useState<object | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

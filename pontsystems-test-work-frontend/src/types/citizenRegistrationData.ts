@@ -1,4 +1,4 @@
-import { ICitizenBaseData } from './CitizenBaseData';
+import { ICitizenBaseData } from './citizenBaseData';
 
 export interface ICitizenRegistrationData extends ICitizenBaseData {
     id: number;

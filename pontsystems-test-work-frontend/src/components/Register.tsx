@@ -2,12 +2,16 @@ import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
 import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
+import { useMockAxios } from "../hooks/useMockAxios";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
 }
 
 function Register(props: RegisterProps) {
+  const { type } = props;
+  const { id } = useParams<{ id: string }>();
+
   const {
     register,
     handleSubmit,
@@ -44,7 +48,9 @@ function Register(props: RegisterProps) {
     nationality?.toLowerCase() === "magyar" && taxIdentifier?.length >= 11;
 
   const onSubmit = (data: ICitizenFormData) => {
-    console.log("submitData", data);
+    if (type === "register") {
+      useMockAxios({ url: "/addCitizen", method: "post", payLoad: data });
+    }
   };
 
   console.log("error", errors);
@@ -145,8 +151,6 @@ function Register(props: RegisterProps) {
               validate: validateDate,
             })}
             type="date"
-            /*      min="1900-01-01"
-            max={new Date().toISOString().split("T")[0]} */
           />
         </div>
         <div>

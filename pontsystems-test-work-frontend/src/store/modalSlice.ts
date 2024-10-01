@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CitizenRegistrationData } from "./citizenDataSlice";
+
+import { ICitizenRegistrationData } from "../types";
 
 interface ModalState {
   visible: boolean;
   type: "delete" | "edit" | "view" | null; 
-  citizen: CitizenRegistrationData | null; 
+  citizen: ICitizenRegistrationData | null; 
 }
 
 const initialState: ModalState = {
@@ -17,7 +18,7 @@ const modalDataSlice = createSlice({
   name: "modalData",
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<{ type: "delete" | "edit" | "view"; citizen: CitizenRegistrationData }>) => {
+    openModal: (state, action: PayloadAction<{ type: "delete" | "edit" | "view"; citizen: ICitizenRegistrationData }>) => {
       state.visible = true;
       state.type = action.payload.type;
       state.citizen = action.payload.citizen;

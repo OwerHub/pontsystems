@@ -1,6 +1,4 @@
 import { useSelector, useDispatch } from "react-redux";
-// import { useSelector } from "react-redux";
-//import { RootState, AppDispatch } from "../store/store";
 import { RootState } from "../store/store";
 import { Table, Space, Button } from "antd";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
