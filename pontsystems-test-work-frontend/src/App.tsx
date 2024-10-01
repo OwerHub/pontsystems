@@ -12,7 +12,9 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register type="register" />} />
+          <Route path="/edit/:id" element={<Register type="edit" />} />
+          <Route path="/view/:id" element={<Register type="view" />} />
         </Routes>
       </Router>
     </>

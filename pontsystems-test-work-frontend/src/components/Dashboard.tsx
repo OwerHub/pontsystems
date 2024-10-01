@@ -1,24 +1,20 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 // import { useSelector } from "react-redux";
 //import { RootState, AppDispatch } from "../store/store";
 import { RootState } from "../store/store";
 import { Table, Space, Button } from "antd";
-// import DeleteModal from "./DeleteModal";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
-import { CitizenRegistrationData } from "../store/citizenDataSlice";
+// import { CitizenRegistrationData } from "../store/citizenDataSlice";
 import { openModal } from "../store/modalSlice";
 import ModalWrapper from "../components/ModalWrapper";
-
+import { ICitizenRegistrationData } from "../types";
 function Dashboard() {
-  // const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-
   const citizens = useSelector((state: RootState) => state.citizenData.data);
   const modalData = useSelector((state: RootState) => state.modalData);
   const dispatch = useDispatch();
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
-  const handleDeleteButton = (citizen: CitizenRegistrationData) => {
+  const handleDeleteButton = (citizen: ICitizenRegistrationData) => {
     dispatch(openModal({ type: "delete", citizen: citizen }));
   };
 
@@ -81,7 +77,7 @@ function Dashboard() {
     {
       title: "Action",
       key: "action",
-      render: (_, record: CitizenRegistrationData) => (
+      render: (_: string, record: ICitizenRegistrationData) => (
         <Space size="middle">
           <a>
             <img style={{ height: "1rem" }} src={viewIcon} alt="View" />
