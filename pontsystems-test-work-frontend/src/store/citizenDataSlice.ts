@@ -118,6 +118,7 @@ const citizenSlice = createSlice({
         addCitizen: (state, action: PayloadAction<ICitizenRegistrationData>) => {
             const newId = state.data.length > 0 ? Math.max(...state.data.map(citizen => citizen.id)) + 1 : 1;
             action.payload.id = newId;
+            console.log('in addCitizenReducer', action.payload);
             state.data.push(action.payload);
         },
         removeCitizen: (state, action: PayloadAction<number>) => {

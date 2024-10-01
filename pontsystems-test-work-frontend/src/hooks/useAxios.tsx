@@ -8,10 +8,15 @@ import {
 } from "../store/citizenDataSlice";
 import { ICitizenRegistrationData } from "../types";
 
+export interface IpayLoad {
+  id?: string;
+  citizen?: ICitizenRegistrationData;
+}
+
 export interface IuseAxiosProps {
   url: string;
   method: "get" | "post" | "put" | "delete";
-  payLoad?: { id?: string; citizen?: ICitizenRegistrationData };
+  payLoad?: IpayLoad;
 }
 
 export function useAxios(props: IuseAxiosProps) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import {
@@ -6,17 +6,15 @@ import {
   removeCitizen as removeCitizenReducer,
 } from "../store/citizenDataSlice";
 import { ICitizenRegistrationData } from "../types";
-import { IuseAxiosProps } from "./useAxios";
+import { IpayLoad } from "./useAxios";
 
-export function useMockAxios(props: IuseAxiosProps) {
-  const { url, method, payLoad } = props;
+export function useMockAxios() {
   const dispatch = useDispatch();
   const [data, setData] = useState<object | undefined>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const citizens = useSelector((state: RootState) => state.citizenData.data);
 
-  // NOTE: An another state and asyncThunk creating seems to overkill for this task, but there is another way to do it.
   const getSelectedCitizen = (citizenId: string | undefined) => {
     const selectedCitizen = citizens.find(
       (citizen) => citizen.id === Number(citizenId)
@@ -29,12 +27,15 @@ export function useMockAxios(props: IuseAxiosProps) {
   };
 
   const addCitizen = (citizen: ICitizenRegistrationData | undefined) => {
+    let status: 400 | 200 | undefined;
     if (citizen) {
       dispatch(addCitizenReducer(citizen));
-      setData({ status: 200 });
+      status = 200;
     } else {
       setError("Missing citizen data");
+      status = 400;
     }
+    return { status };
   };
 
   const deleteCitizen = (citizenId: string | undefined) => {
@@ -50,26 +51,27 @@ export function useMockAxios(props: IuseAxiosProps) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+  const fetchData = async (
+    url: string,
+    method: string,
+    payLoad?: IpayLoad
+  ): Promise<{ status: 400 | 200 | undefined }> => {
+    setLoading(true);
+    await delay(1000);
+    let status: 400 | 200 | undefined;
 
-      if (url === "/getCitizenById" && method === "get") {
-        await delay(1000);
-        getSelectedCitizen(payLoad?.id);
-      } else if (url === "/addCitizen" && method === "post") {
-        await delay(1000);
-        addCitizen(payLoad?.citizen);
-      } else if (url === "/deleteCitizen" && method === "delete") {
-        await delay(1000);
-        deleteCitizen(payLoad?.id);
-      }
+    if (url === "/getCitizenById" && method === "get") {
+      getSelectedCitizen(payLoad?.id);
+    } else if (url === "/addCitizen" && method === "post") {
+      console.log("in addCitizen");
+      status = addCitizen(payLoad?.citizen).status;
+    } else if (url === "/deleteCitizen" && method === "delete") {
+      deleteCitizen(payLoad?.id);
+      status = 200;
+    }
+    setLoading(false);
+    return { status };
+  };
 
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [url, method, payLoad]);
-
-  return { data, loading, error };
+  return { data, loading, error, fetchData };
 }

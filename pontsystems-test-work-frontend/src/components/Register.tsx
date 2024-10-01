@@ -3,6 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
@@ -18,6 +19,10 @@ function Register(props: RegisterProps) {
     control,
     formState: { errors },
   } = useForm<ICitizenFormData>();
+
+  const navigate = useNavigate();
+
+  const { data, loading, error, fetchData } = useMockAxios();
 
   const gender = useWatch({ control, name: "gender" });
   const nationality = useWatch({ control, name: "nationality" });
@@ -47,9 +52,19 @@ function Register(props: RegisterProps) {
   const isCreditEligibleEnabled =
     nationality?.toLowerCase() === "magyar" && taxIdentifier?.length >= 11;
 
-  const onSubmit = (data: ICitizenFormData) => {
+  const onSubmit = async (data: ICitizenFormData) => {
+    const formattedDateOfBirth = data.dateOfBirth.toString();
     if (type === "register") {
-      useMockAxios({ url: "/addCitizen", method: "post", payLoad: data });
+      try {
+        const response = await fetchData("/addCitizen", "post", {
+          citizen: { ...data, dateOfBirth: formattedDateOfBirth },
+        });
+        if (response.status === 200) {
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error submitting form", error);
+      }
     }
   };
 
@@ -197,6 +212,7 @@ function Register(props: RegisterProps) {
           </button>
         </div>
       </form>
+      {loading && <div>Loading...</div>}
     </div>
   );
 }
