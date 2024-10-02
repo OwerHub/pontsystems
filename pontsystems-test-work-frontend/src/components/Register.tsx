@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
-import { ICitizenFormData, ICitizenRegistrationData } from "../types";
+import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ interface RegisterProps {
 function Register(props: RegisterProps) {
   const { type } = props;
   const { id } = useParams<{ id: string }>();
+  // const [initialData, setInitialData] = useState<ICitizenFormData | null>(null);
   const [incomingCitizenData, setIncomingCitizenData] =
     useState<ICitizenFormData | null>(null);
 
@@ -21,6 +22,7 @@ function Register(props: RegisterProps) {
     handleSubmit,
     control,
     reset,
+    // getValues,
     formState: { errors },
   } = useForm<ICitizenFormData>({
     defaultValues: {
@@ -43,12 +45,13 @@ function Register(props: RegisterProps) {
         taxIdentifier: incomingCitizenData.taxIdentifier || "",
         creditEligible: incomingCitizenData.creditEligible || false,
       });
+      // setInitialData(incomingCitizenData);
     }
   }, [incomingCitizenData, reset]);
 
   const navigate = useNavigate();
 
-  const { data, loading, error, fetchData } = useMockAxios();
+  const { loading, error, fetchData } = useMockAxios();
 
   const gender = useWatch({ control, name: "gender" });
   const nationality = useWatch({ control, name: "nationality" });
@@ -111,6 +114,12 @@ function Register(props: RegisterProps) {
     }
   };
 
+  const handleCloseButton = () => {
+    // NOTE: The isDirty state isn't usable because the default data was loaded asynchronously.
+    // TODO: Implement function what checks the changes (except id, and handle the disabled creditEligible )
+    navigate("/dashboard");
+  };
+
   const getCitizenById = async (id: string | undefined) => {
     const response = await fetchData("/getCitizenById", "get", { id });
     console.log("response", response);
@@ -162,6 +171,7 @@ function Register(props: RegisterProps) {
             {...register("title", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -172,6 +182,7 @@ function Register(props: RegisterProps) {
             {...register("firstName", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -182,6 +193,7 @@ function Register(props: RegisterProps) {
             {...register("lastName", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -192,6 +204,7 @@ function Register(props: RegisterProps) {
             {...register("middleName", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -202,6 +215,7 @@ function Register(props: RegisterProps) {
             {...register("gender", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -211,7 +225,11 @@ function Register(props: RegisterProps) {
             <div>
               <label>
                 Leánykori név:
-                <input type="text" {...register("maidenName")} />
+                <input
+                  {...register("maidenName")}
+                  type="text"
+                  disabled={type === "view"}
+                />
               </label>
             </div>
           )}
@@ -223,6 +241,7 @@ function Register(props: RegisterProps) {
             {...register("placeOfBirth", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -234,6 +253,7 @@ function Register(props: RegisterProps) {
               required: "This field is required",
               validate: validateDate,
             })}
+            disabled={type === "view"}
             type="date"
           />
         </div>
@@ -244,6 +264,7 @@ function Register(props: RegisterProps) {
             {...register("nationality", {
               required: "This field is required",
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -255,6 +276,7 @@ function Register(props: RegisterProps) {
               required: "This field is required",
               validate: validateTaxIdentifier,
             })}
+            disabled={type === "view"}
             type="text"
           />
         </div>
@@ -265,6 +287,7 @@ function Register(props: RegisterProps) {
               required: "This field is required",
               disabled: !isCreditEligibleEnabled,
             })}
+            disabled={type === "view"}
             type="checkbox"
           />
         </div>
@@ -272,16 +295,14 @@ function Register(props: RegisterProps) {
         <div
           style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
         >
-          <button type="submit">Save</button>
-          <button
-            type="button"
-            onClick={() => console.log("Close button clicked")}
-          >
+          {type !== "view" && <button type="submit">Save</button>}
+          <button type="button" onClick={handleCloseButton}>
             Close
           </button>
         </div>
       </form>
       {loading && <div>Loading...</div>}
+      {error && <div>Error: {error}</div>}
     </div>
   );
 }

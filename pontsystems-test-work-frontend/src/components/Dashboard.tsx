@@ -6,14 +6,21 @@ import { deleteIcon, editIcon, viewIcon } from "../assets";
 import { openModal } from "../store/modalSlice";
 import ModalWrapper from "../components/ModalWrapper";
 import { ICitizenRegistrationData } from "../types";
+import { useNavigate } from "react-router-dom";
+
 function Dashboard() {
   const citizens = useSelector((state: RootState) => state.citizenData.data);
   const modalData = useSelector((state: RootState) => state.modalData);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
   const handleDeleteButton = (citizen: ICitizenRegistrationData) => {
     dispatch(openModal({ type: "delete", citizen: citizen }));
+  };
+
+  const handleEditButton = (citizen: ICitizenRegistrationData) => {
+    navigate(`/edit/${citizen.id}`);
   };
 
   const columns = [
@@ -80,9 +87,12 @@ function Dashboard() {
           <a>
             <img style={{ height: "1rem" }} src={viewIcon} alt="View" />
           </a>
-          <a>
+          <div
+            onClick={() => handleEditButton(record)}
+            style={{ height: "1rem", width: "1rem", cursor: "pointer" }}
+          >
             <img style={{ height: "1rem" }} src={editIcon} alt="Edit" />
-          </a>
+          </div>
           <div
             style={{ height: "1rem", width: "1rem", cursor: "pointer" }}
             onClick={() => handleDeleteButton(record)}
@@ -98,7 +108,11 @@ function Dashboard() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <h1>Dashboard</h1>
 
-      <Button type="primary" style={{ marginLeft: "auto" }}>
+      <Button
+        type="primary"
+        style={{ marginLeft: "auto" }}
+        onClick={() => navigate("/register")}
+      >
         Add Citizen
       </Button>
       {citizens.length > 0 ? (

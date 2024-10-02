@@ -13,11 +13,11 @@ const dummyCitizensData = [
         firstName: 'John',
         middleName: 'Smith',
         gender:'male',
-        maidenName: null,
+        maidenName: "",
         placeOfBirth: 'Budapest',
         dateOfBirth: '1990-01-01',
         nationality: 'American',
-        taxIdentifier: 'USA123456789',
+        taxIdentifier: '8A123456789',
         creditEligible: true,
     },
     {
@@ -31,7 +31,7 @@ const dummyCitizensData = [
         placeOfBirth: 'Budapest',
         dateOfBirth: '1990-01-01',
         nationality: 'Hungary',
-        taxIdentifier: 'USA123456789',
+        taxIdentifier: '8A123456789',
         creditEligible: true,
     },
     {
@@ -45,7 +45,7 @@ const dummyCitizensData = [
         placeOfBirth: 'New York',
         dateOfBirth: '1985-05-15',
         nationality: 'Hungary',
-        taxIdentifier: 'USA987654321',
+        taxIdentifier: '8A987654321',
         creditEligible: false,
     },
     {
@@ -55,11 +55,11 @@ const dummyCitizensData = [
         firstName: 'James',
         middleName: 'Edward',
         gender: 'male',
-        maidenName: null,
+        maidenName: "",
         placeOfBirth: 'Los Angeles',
         dateOfBirth: '1978-11-23',
         nationality: 'American',
-        taxIdentifier: 'USA123987654',
+        taxIdentifier: '8A123987654',
         creditEligible: true,
     },
     {
@@ -73,7 +73,7 @@ const dummyCitizensData = [
         placeOfBirth: 'Chicago',
         dateOfBirth: '1992-07-30',
         nationality: 'American',
-        taxIdentifier: 'USA456123789',
+        taxIdentifier: '8A456123789',
         creditEligible: true,
     },
     {
@@ -83,11 +83,11 @@ const dummyCitizensData = [
         firstName: 'Michael',
         middleName: 'John',
         gender: 'male',
-        maidenName: null,
+        maidenName: "",
         placeOfBirth: 'Houston',
         dateOfBirth: '1980-03-12',
         nationality: 'American',
-        taxIdentifier: 'USA789456123',
+        taxIdentifier: '8A789456123',
         creditEligible: false,
     }
 ] as ICitizenRegistrationData[];

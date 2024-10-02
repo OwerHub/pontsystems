@@ -91,7 +91,6 @@ export function useMockAxios() {
       status = getResponse.status;
       selectedCitizen = getResponse.selectedCitizen;
     } else if (url === "/addCitizen" && method === "post") {
-      console.log("in addCitizen");
       status = addCitizen(payLoad?.citizen).status;
     } else if (url === "/deleteCitizen" && method === "delete") {
       deleteCitizen(payLoad?.id);
@@ -99,6 +98,7 @@ export function useMockAxios() {
     } else if (url === "/editCitizen" && method === "put") {
       status = editCitizen(payLoad?.citizen).status;
     }
+
     setLoading(false);
     return { status, selectedCitizen };
   };
