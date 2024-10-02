@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
-import { ICitizenFormData } from "../types";
+import { ICitizenFormData, ICitizenRegistrationData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
@@ -12,13 +13,38 @@ interface RegisterProps {
 function Register(props: RegisterProps) {
   const { type } = props;
   const { id } = useParams<{ id: string }>();
+  const [incomingCitizenData, setIncomingCitizenData] =
+    useState<ICitizenFormData | null>(null);
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
-  } = useForm<ICitizenFormData>();
+  } = useForm<ICitizenFormData>({
+    defaultValues: {
+      creditEligible: false,
+    },
+  });
+
+  useEffect(() => {
+    if (incomingCitizenData) {
+      reset({
+        title: incomingCitizenData.title || "",
+        firstName: incomingCitizenData.firstName || "",
+        lastName: incomingCitizenData.lastName || "",
+        middleName: incomingCitizenData.middleName || "",
+        gender: incomingCitizenData.gender || "",
+        maidenName: incomingCitizenData.maidenName || "",
+        placeOfBirth: incomingCitizenData.placeOfBirth || "",
+        dateOfBirth: incomingCitizenData.dateOfBirth || "",
+        nationality: incomingCitizenData.nationality || "",
+        taxIdentifier: incomingCitizenData.taxIdentifier || "",
+        creditEligible: incomingCitizenData.creditEligible || false,
+      });
+    }
+  }, [incomingCitizenData, reset]);
 
   const navigate = useNavigate();
 
@@ -28,7 +54,7 @@ function Register(props: RegisterProps) {
   const nationality = useWatch({ control, name: "nationality" });
   const taxIdentifier = useWatch({ control, name: "taxIdentifier" });
 
-  const validateDate = (value: Date) => {
+  const validateDate = (value: string | Date) => {
     const selectedDate = new Date(value);
     const currentDate = new Date();
     const minDate = new Date("1900-01-01");
@@ -66,9 +92,54 @@ function Register(props: RegisterProps) {
         console.error("Error submitting form", error);
       }
     }
+    if (type === "edit") {
+      console.log("%ceditCitizen", "color: green");
+      try {
+        const response = await fetchData("/editCitizen", "put", {
+          citizen: {
+            ...data,
+            dateOfBirth: formattedDateOfBirth,
+            id: Number(id),
+          },
+        });
+        if (response.status === 200) {
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error submitting form", error);
+      }
+    }
   };
 
-  console.log("error", errors);
+  const getCitizenById = async (id: string | undefined) => {
+    const response = await fetchData("/getCitizenById", "get", { id });
+    console.log("response", response);
+
+    if (response.status === 200 && response?.selectedCitizen) {
+      // const dateOfBirthDate = new Date(response?.selectedCitizen.dateOfBirth);
+
+      setIncomingCitizenData({
+        ...response?.selectedCitizen,
+        /*   dateOfBirth: dateOfBirthDate, */
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (type === "edit" || type === "view") {
+      getCitizenById(id);
+    }
+  }, [id, type]);
+
+  // TODO: remove this
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
+
+  // TODO: remove this
+  useEffect(() => {
+    console.log("incomingCitizenData", incomingCitizenData);
+  }, [incomingCitizenData]);
 
   return (
     <div
@@ -95,9 +166,7 @@ function Register(props: RegisterProps) {
           />
         </div>
         <div>
-          <label>
-            First Name: {register("firstName").required && <span>sds</span>}
-          </label>
+          <label>First Name:</label>
           <input
             style={{ borderColor: errors.firstName ? "red" : "initial" }}
             {...register("firstName", {

@@ -124,6 +124,11 @@ const citizenSlice = createSlice({
         removeCitizen: (state, action: PayloadAction<number>) => {
             state.data = state.data.filter(citizen => citizen.id !== action.payload);
         },
+        editCitizen: (state, action: PayloadAction<ICitizenRegistrationData>) => {
+            console.log('%c in editCitizenReducer', 'color: green', action.payload);    
+            const index = state.data.findIndex(citizen => citizen.id === action.payload.id);
+            state.data[index] = action.payload;
+        }
     },
     extraReducers(builder) {
         builder.addCase(fetchCitizens.pending, (state) => {
@@ -143,5 +148,5 @@ const citizenSlice = createSlice({
 
 });
 
-export const { addCitizen, removeCitizen } = citizenSlice.actions;
+export const { addCitizen, removeCitizen, editCitizen } = citizenSlice.actions;
 export default citizenSlice.reducer;
