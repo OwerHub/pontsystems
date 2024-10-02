@@ -29,6 +29,10 @@ function Dashboard() {
     navigate(`/edit/${citizen.id}`);
   };
 
+  const handleViewButton = (citizen: ICitizenRegistrationData) => {
+    navigate(`/view/${citizen.id}`);
+  };
+
   useEffect(() => {
     if (firstLoading) {
       dispatch(fetchCitizens());
@@ -96,9 +100,12 @@ function Dashboard() {
       key: "action",
       render: (_: string, record: ICitizenRegistrationData) => (
         <Space size="middle">
-          <a>
+          <div
+            onClick={() => handleViewButton(record)}
+            style={{ height: "1rem", width: "1rem", cursor: "pointer" }}
+          >
             <img style={{ height: "1rem" }} src={viewIcon} alt="View" />
-          </a>
+          </div>
           <div
             onClick={() => handleEditButton(record)}
             style={{ height: "1rem", width: "1rem", cursor: "pointer" }}

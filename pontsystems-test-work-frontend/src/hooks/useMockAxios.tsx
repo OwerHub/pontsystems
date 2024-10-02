@@ -7,15 +7,14 @@ import {
   editCitizen as editCitizenReducer,
 } from "../store/citizenDataSlice";
 import { ICitizenRegistrationData } from "../types";
-import { IpayLoad } from "./useAxios";
 
-interface IresponseData {
+/* interface IresponseData {
   selectedCitizen?: ICitizenRegistrationData;
-}
+} */
 
 export function useMockAxios() {
   const dispatch = useDispatch();
-  const [data, setData] = useState<IresponseData | undefined>();
+  // const [data, setData] = useState<IresponseData | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const citizens = useSelector((state: RootState) => state.citizenData.data);
@@ -48,14 +47,15 @@ export function useMockAxios() {
   };
 
   const deleteCitizen = (citizenId: string | undefined) => {
+    let status: 400 | 200 | undefined;
     if (citizenId) {
       dispatch(removeCitizenReducer(Number(citizenId)));
-      setData({ status: 200 });
+      status = 200;
     } else {
-      setError("Missing citizen id");
+      status = 400;
     }
+    return { status };
   };
-
   const editCitizen = (citizen: ICitizenRegistrationData | undefined) => {
     let status: 400 | 200 | undefined;
 
@@ -76,7 +76,7 @@ export function useMockAxios() {
   const fetchData = async (
     url: string,
     method: string,
-    payLoad?: IpayLoad
+    payLoad?: any
   ): Promise<{
     status: 400 | 200 | undefined;
     selectedCitizen?: ICitizenRegistrationData;
@@ -103,7 +103,5 @@ export function useMockAxios() {
     return { status, selectedCitizen };
   };
 
-  console.log("data", data);
-
-  return { data, loading, error, fetchData };
+  return { loading, error, fetchData };
 }
