@@ -17,7 +17,7 @@ const useAxios = () => {
 
   instance.interceptors.request.use(
     (config) => {
-      const token = Cookies.get("jwt_token");
+      const token = Cookies.get("pontSystems_token");
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }

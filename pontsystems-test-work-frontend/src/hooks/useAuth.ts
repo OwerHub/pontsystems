@@ -7,10 +7,6 @@ const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     const login = async (username: string, password: string) => {
-
-    
-
-
         try {
             const response = await axios.post("http://localhost:5000/login", {
               username,
@@ -18,7 +14,7 @@ const useAuth = () => {
             });
             const token = response.data.token; 
             console.log("Login successful:", token);
-            Cookies.set('jwt_token', token, { secure: false }); 
+            Cookies.set('pontSystems_token', token, { secure: false }); 
             setIsAuthenticated(true);
           } catch (error) {
             console.error('Login failed:', error);
@@ -28,9 +24,11 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        Cookies.remove('jwt_token');
+        Cookies.remove('pontSystems_token');
         setIsAuthenticated(false);
     };
+
+    console.log('isAuthenticated:', isAuthenticated);
 
     return {
         isAuthenticated,

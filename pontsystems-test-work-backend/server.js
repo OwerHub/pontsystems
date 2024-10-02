@@ -20,6 +20,12 @@ app.post('/login', (req, res) => {
     return res.status(200).json({ token });
 });
 
+app.get('/test', (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    return res.status(200).json({ message: 'Hello, World!' ,
+         token:token || undefined});
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

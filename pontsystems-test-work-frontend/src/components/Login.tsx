@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import useAxios from "../hooks/useAxios";
-import axios from "axios";
-// import useAxios from "../hooks/useAxios";
 
 const Login = () => {
   const { login, isAuthenticated } = useAuth();
@@ -10,12 +7,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  /*   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await login(username, password);
-  }; */
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login(username, password);
   };
@@ -48,6 +40,9 @@ const Login = () => {
           Bejelentkezés
         </button>
       </form>
+      <div>
+        {isAuthenticated ? "Sikeres bejelentkezés" : "Sikertelen bejelentkezés"}
+      </div>
     </div>
   );
 };
