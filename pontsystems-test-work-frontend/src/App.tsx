@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Header from "./components/Header";
 import DeveloperFooter from "./components/DeveloperFooter";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -24,11 +25,39 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register type="register" />} />
-          <Route path="/edit/:id" element={<Register type="edit" />} />
-          <Route path="/view/:id" element={<Register type="view" />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRoute>
+                <Register type="register" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <Register type="edit" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/view/:id"
+            element={
+              <ProtectedRoute>
+                <Register type="view" />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <DeveloperFooter />
       </Router>

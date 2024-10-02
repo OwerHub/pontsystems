@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 const app = express();
-const SECRET_KEY = 'your_secret_key'; 
+//TODO: move the key to .env file
+const SECRET_KEY = 'really_secret_key'; 
 
 app.use(cors({
     origin: 'http://localhost:3000', 

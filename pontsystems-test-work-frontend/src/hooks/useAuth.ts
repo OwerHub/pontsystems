@@ -1,34 +1,34 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
+export const tokenName = 'pontSystems_token';
 
-const useAuth = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+const useAuth = () => {  
 
     const login = async (username: string, password: string) => {
+        // TODO: use the useAxios to fetch ,and fix the endless loop issue
         try {
             const response = await axios.post("http://localhost:5000/login", {
               username,
               password,
             });
             const token = response.data.token; 
-            console.log("Login successful:", token);
-            Cookies.set('pontSystems_token', token, { secure: false }); 
-            setIsAuthenticated(true);
+            Cookies.set(tokenName, token, { secure: false }); 
           } catch (error) {
             console.error('Login failed:', error);
-            setIsAuthenticated(false);
           }
 
     };
 
     const logout = () => {
-        Cookies.remove('pontSystems_token');
-        setIsAuthenticated(false);
+        Cookies.remove(tokenName);
     };
 
-    console.log('isAuthenticated:', isAuthenticated);
+    const isAuthenticated = () => {
+        return !!Cookies.get(tokenName);
+    }
+ 
 
     return {
         isAuthenticated,

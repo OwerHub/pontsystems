@@ -5,17 +5,21 @@ import useAuth from "../hooks/useAuth";
 function DeveloperFooter() {
   const [requestTest, setRequestTest] = useState<string>("");
   const [tokenTest, setTokenTest] = useState<boolean>(false);
+  const [authenticateTest, setAuthenticateTest] = useState<boolean>(false);
   const { fetch, loading, error } = useAxios();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const testRequestHandler = async () => {
     const response = await fetch("/test", "GET");
-    console.log("testRequestHandler", response);
     setRequestTest(response.data.message);
     if (response.data.token?.length > 5) {
       setTokenTest(true);
     } else {
       setTokenTest(false);
     }
+  };
+
+  const checkAuthentication = () => {
+    setAuthenticateTest(isAuthenticated());
   };
 
   return (
@@ -29,6 +33,12 @@ function DeveloperFooter() {
         <button onClick={() => logout()}>logout</button>
         <button onClick={() => testRequestHandler()}>
           {loading ? "Loading..." : "Test Request"}
+        </button>
+        <button
+          onClick={() => checkAuthentication()}
+          style={{ background: `${authenticateTest ? "green" : "red"}` }}
+        >
+          CheckAutentication
         </button>
       </div>
       <div>

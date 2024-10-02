@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import useAuth from "./useAuth";
+import { tokenName } from "./useAuth";
 
 const useAxios = () => {
   const { logout } = useAuth();
@@ -17,7 +18,7 @@ const useAxios = () => {
 
   instance.interceptors.request.use(
     (config) => {
-      const token = Cookies.get("pontSystems_token");
+      const token = Cookies.get(tokenName);
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
