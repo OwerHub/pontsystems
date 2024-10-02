@@ -140,16 +140,7 @@ function Register(props: RegisterProps) {
     }
   }, [id, type]);
 
-  // TODO: remove this
-  useEffect(() => {
-    console.log("errors", errors);
-  }, [errors]);
-
-  // TODO: remove this
-  useEffect(() => {
-    console.log("incomingCitizenData", incomingCitizenData);
-  }, [incomingCitizenData]);
-
+  // TODO: check the opportunity to refactor the form componenet and iterate over the fields
   return (
     <div
       style={{ display: "flex", flexDirection: "column", background: "#f0f2" }}

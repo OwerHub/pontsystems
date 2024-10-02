@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
 import axios from "axios";
-import {
-  addCitizen as addCitizenReducer,
-  removeCitizen as removeCitizenReducer,
-} from "../store/citizenDataSlice";
 import { ICitizenRegistrationData } from "../types";
 
 export interface IpayLoad {
