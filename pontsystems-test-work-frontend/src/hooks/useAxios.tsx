@@ -1,38 +1,72 @@
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { ICitizenRegistrationData } from "../types";
+import Cookies from "js-cookie";
+import { useState } from "react";
+import useAuth from "./useAuth";
 
-export interface IpayLoad {
-  id?: string;
-  citizen?: ICitizenRegistrationData;
-}
-
-export interface IuseAxiosProps {
-  url: string;
-  method: "get" | "post" | "put" | "delete";
-  payLoad?: IpayLoad;
-}
-
-export function useAxios(props: IuseAxiosProps) {
-  const { url, method, payLoad } = props;
-
-  const [data, setData] = useState<object | null>(null);
-  const [loading, setLoading] = useState(true);
+const useAxios = () => {
+  const { logout } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    axios
-      .get(url)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [url]);
+  const instance = axios.create({
+    baseURL: "http://localhost:5000",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  return { data, loading, error };
-}
+  instance.interceptors.request.use(
+    (config) => {
+      const token = Cookies.get("jwt_token");
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        logout();
+      }
+      setError(error.message);
+      return Promise.reject(error);
+    }
+  );
+
+  const fetch = async (
+    url: string,
+    method: "GET" | "POST" | "PUT" | "DELETE",
+    payload?: any // The any type in here is OK
+  ) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await instance({
+        url,
+        method,
+        data: payload,
+      });
+      return { data: response.data, error: null };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.message);
+        return { data: null, error: error.message };
+      }
+      setError("An unexpected error occurred");
+      return { data: null, error: "An unexpected error occurred" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetch, loading, error };
+};
+
+export default useAxios;

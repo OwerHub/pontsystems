@@ -14,9 +14,9 @@ app.use(cors({
 app.use(express.json()); // JSON body parser
 
 app.post('/login', (req, res) => {
-
+    console.log('Request body:', req.body);
     const token = jwt.sign({ username: req.body.username || 'guest' }, SECRET_KEY, { expiresIn: '1h' });
-
+    console.log('Token:', token);
     return res.status(200).json({ token });
 });
 
