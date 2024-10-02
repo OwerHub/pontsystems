@@ -7,6 +7,7 @@ import { openModal } from "../store/modalSlice";
 import ModalWrapper from "../components/ModalWrapper";
 import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Dashboard() {
   const citizens = useSelector((state: RootState) => state.citizenData.data);
@@ -121,6 +122,26 @@ function Dashboard() {
         <p>No citizens found</p>
       )}
       {modalData.visible && modalData.type === "delete" && <ModalWrapper />}
+
+      <div className="test">
+        teszt
+        <button
+          style={{ cursor: "pointer" }}
+          onClick={async () => {
+            try {
+              const response = await axios.post("http://localhost:5000/login", {
+                username: "yourUsername",
+                password: "yourPassword",
+              });
+              console.log("Login successful:", response.data);
+            } catch (error) {
+              console.error("Error logging in:", error);
+            }
+          }}
+        >
+          send
+        </button>
+      </div>
     </div>
   );
 }
