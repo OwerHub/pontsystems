@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState, AppDispatch } from "../store/store";
 import { Table, Space, Button } from "antd";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
 // import { CitizenRegistrationData } from "../store/citizenDataSlice";
@@ -7,11 +7,17 @@ import { openModal } from "../store/modalSlice";
 import ModalWrapper from "../components/ModalWrapper";
 import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
+import { fetchCitizens } from "../store/citizenDataSlice";
+import { useEffect } from "react";
 
 function Dashboard() {
-  const citizens = useSelector((state: RootState) => state.citizenData.data);
+  const {
+    data: citizens,
+    isLoading,
+    firstLoading,
+  } = useSelector((state: RootState) => state.citizenData);
   const modalData = useSelector((state: RootState) => state.modalData);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
@@ -22,6 +28,12 @@ function Dashboard() {
   const handleEditButton = (citizen: ICitizenRegistrationData) => {
     navigate(`/edit/${citizen.id}`);
   };
+
+  useEffect(() => {
+    if (firstLoading) {
+      dispatch(fetchCitizens());
+    }
+  }, [dispatch]);
 
   const columns = [
     {
@@ -104,6 +116,10 @@ function Dashboard() {
     },
   ];
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <h1>Dashboard</h1>
@@ -115,7 +131,7 @@ function Dashboard() {
       >
         Add Citizen
       </Button>
-      {citizens.length > 0 ? (
+      {citizens?.length > 0 ? (
         <Table columns={columns} dataSource={citizens} rowKey="id" />
       ) : (
         <p>No citizens found</p>
