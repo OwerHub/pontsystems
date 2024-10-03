@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 
 const Login = () => {
-  const { login, isAuthenticated } = useAuth();
-  // const { loading, error } = useAxios();
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,9 +39,6 @@ const Login = () => {
           Bejelentkezés
         </button>
       </form>
-      <div>
-        {isAuthenticated ? "Sikeres bejelentkezés" : "Sikertelen bejelentkezés"}
-      </div>
     </div>
   );
 };

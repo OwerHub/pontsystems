@@ -4,7 +4,6 @@ import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "../store/modalSlice";
 import { AppDispatch } from "../store/store";
@@ -49,11 +48,6 @@ function RegisterForm(props: RegisterProps) {
   const getErrorMessages = () => {
     return Object.values(errors).map((error) => error.message);
   };
-
-  // TODO: delete this useEffect
-  useEffect(() => {
-    console.log("errors", getErrorMessages()[0]);
-  }, [errors]);
 
   const validateDate = (value: string | Date) => {
     const selectedDate = new Date(value);

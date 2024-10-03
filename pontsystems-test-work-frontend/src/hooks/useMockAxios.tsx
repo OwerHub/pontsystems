@@ -8,20 +8,14 @@ import {
 } from "../store/citizenDataSlice";
 import { ICitizenRegistrationData } from "../types";
 
-/* interface IresponseData {
-  selectedCitizen?: ICitizenRegistrationData;
-} */
-
 export function useMockAxios() {
   const dispatch = useDispatch();
-  // const [data, setData] = useState<IresponseData | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const citizens = useSelector((state: RootState) => state.citizenData.data);
 
   const getSelectedCitizen = (citizenId: string | undefined) => {
     let status: 400 | 200 | undefined;
-
     const selectedCitizen = citizens.find(
       (citizen) => citizen.id === Number(citizenId)
     );
@@ -60,14 +54,12 @@ export function useMockAxios() {
 
   const editCitizen = (citizen: ICitizenRegistrationData | undefined) => {
     let status: 400 | 200 | undefined;
-
     if (citizen) {
       dispatch(editCitizenReducer(citizen));
       status = 200;
     } else {
       status = 400;
     }
-
     return { status };
   };
 
@@ -95,7 +87,6 @@ export function useMockAxios() {
     } else if (url === "/addCitizen" && method === "post") {
       status = addCitizen(payLoad?.citizen).status;
     } else if (url === "/deleteCitizen" && method === "delete") {
-      console.log("deleteCitizenAxiois", payLoad);
       status = deleteCitizen(payLoad).status;
     } else if (url === "/editCitizen" && method === "put") {
       status = editCitizen(payLoad?.citizen).status;

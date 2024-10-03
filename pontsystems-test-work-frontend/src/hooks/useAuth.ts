@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -7,7 +6,7 @@ export const tokenName = 'pontSystems_token';
 const useAuth = () => {  
 
     const login = async (username: string, password: string) => {
-        // TODO: use the useAxios to fetch ,and fix the endless loop issue
+        // TODO: check the options of use useAxios but beware the infinite re-renders
         try {
             const response = await axios.post("http://localhost:5000/login", {
               username,
@@ -28,7 +27,6 @@ const useAuth = () => {
     const isAuthenticated = () => {
         return !!Cookies.get(tokenName);
     }
- 
 
     return {
         isAuthenticated,

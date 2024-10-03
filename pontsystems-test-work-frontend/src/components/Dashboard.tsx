@@ -7,7 +7,7 @@ import { openModal } from "../store/modalSlice";
 import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
 import { fetchCitizens } from "../store/citizenDataSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function Dashboard() {
   const {
@@ -15,11 +15,9 @@ function Dashboard() {
     isLoading,
     firstLoading,
   } = useSelector((state: RootState) => state.citizenData);
-  const modalData = useSelector((state: RootState) => state.modalData);
+
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const [selectedCitizen, setSelectedCitizen] =
-    useState<ICitizenRegistrationData | null>(null);
 
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
@@ -40,7 +38,6 @@ function Dashboard() {
         payLoad: { citizenId: citizenId },
       })
     );
-    setSelectedCitizen(citizen);
   };
 
   const handleEditButton = (citizen: ICitizenRegistrationData) => {
@@ -57,6 +54,7 @@ function Dashboard() {
     }
   }, [dispatch]);
 
+  // TODO: extract fix columns to a separate file
   const columns = [
     {
       title: "Title",
