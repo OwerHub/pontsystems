@@ -11,7 +11,6 @@ function Register(props: RegisterProps) {
   const { type } = props;
   const { id } = useParams<{ id: string }>();
 
-  // const [initialData, setInitialData] = useState<ICitizenFormData | null>(null);
   const [incomingCitizenData, setIncomingCitizenData] =
     useState<ICitizenFormData | null>(null);
 
@@ -22,11 +21,8 @@ function Register(props: RegisterProps) {
     console.log("response", response);
 
     if (response.status === 200 && response?.selectedCitizen) {
-      // const dateOfBirthDate = new Date(response?.selectedCitizen.dateOfBirth);
-
       setIncomingCitizenData({
         ...response?.selectedCitizen,
-        /*   dateOfBirth: dateOfBirthDate, */
       });
     }
   };

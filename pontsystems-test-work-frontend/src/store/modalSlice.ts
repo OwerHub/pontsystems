@@ -1,35 +1,47 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ICitizenRegistrationData } from "../types";
+interface IpayLoadAction {
+ modalIdentifier: 'deleteCheck'| 'formQuitCheck'| ''
+ type: "dirtyCheck" |"error" |""
+  title: string;
+  message: string;
+  payLoad?: { citizenId?: string}
+  onOK?: boolean;
+}
 
-interface ModalState {
-  visible: boolean;
-  type: "delete" | "edit" | "view" | null; 
-  citizen: ICitizenRegistrationData | null; 
+interface ModalState extends IpayLoadAction {
+   visible: boolean;
 }
 
 const initialState: ModalState = {
   visible: false,
-  type: null,
-  citizen: null,
+  modalIdentifier: '',
+  title: '',
+  type: '',
+  message: '',
+  onOK: false,
 };
 
 const modalDataSlice = createSlice({
   name: "modalData",
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<{ type: "delete" | "edit" | "view"; citizen: ICitizenRegistrationData }>) => {
+    openModal: (state, action: PayloadAction<IpayLoadAction>) => {
       state.visible = true;
+      state.message = action.payload.message;
+      state.title = action.payload.title;
       state.type = action.payload.type;
-      state.citizen = action.payload.citizen;
+      state.modalIdentifier = action.payload.modalIdentifier;
+      state.payLoad = action.payload.payLoad;
     },
-    closeModal: (state) => {
-      state.visible = false;
-      state.type = null;
-      state.citizen = null;
+    clickOK: (state) => {
+      state.onOK = true;
+    },
+    closeModal: () => {
+      return initialState;
     },
   },
 });
 
-export const { openModal, closeModal } = modalDataSlice.actions;
+export const { openModal, closeModal, clickOK } = modalDataSlice.actions;
 export default modalDataSlice.reducer;

@@ -6,9 +6,14 @@ import Register from "./components/Register";
 import Header from "./components/Header";
 import DeveloperFooter from "./components/DeveloperFooter";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CheckModal from "./components/CheckModal";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
 function App() {
   // const [count, setCount] = useState(0)
+
+  const modalData = useSelector((state: RootState) => state.modalData);
 
   return (
     <div
@@ -59,6 +64,7 @@ function App() {
             }
           />
         </Routes>
+        {modalData.visible && <CheckModal />}
         <DeveloperFooter />
       </Router>
     </div>

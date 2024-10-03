@@ -4,11 +4,10 @@ import { Table, Space, Button } from "antd";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
 // import { CitizenRegistrationData } from "../store/citizenDataSlice";
 import { openModal } from "../store/modalSlice";
-import ModalWrapper from "../components/ModalWrapper";
 import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
 import { fetchCitizens } from "../store/citizenDataSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
   const {
@@ -19,10 +18,29 @@ function Dashboard() {
   const modalData = useSelector((state: RootState) => state.modalData);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedCitizen, setSelectedCitizen] =
+    useState<ICitizenRegistrationData | null>(null);
+
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
 
   const handleDeleteButton = (citizen: ICitizenRegistrationData) => {
-    dispatch(openModal({ type: "delete", citizen: citizen }));
+    const citizenName =
+      citizen.firstName && citizen.lastName
+        ? `${citizen.firstName} ${citizen.lastName}`
+        : "this citizen";
+
+    const citizenId = citizen.id.toString();
+
+    dispatch(
+      openModal({
+        modalIdentifier: "deleteCheck",
+        type: "dirtyCheck",
+        title: "Delete Citizen",
+        message: `Are you sure you want to delete ${citizenName} ?`,
+        payLoad: { citizenId: citizenId },
+      })
+    );
+    setSelectedCitizen(citizen);
   };
 
   const handleEditButton = (citizen: ICitizenRegistrationData) => {
@@ -143,7 +161,6 @@ function Dashboard() {
       ) : (
         <p>No citizens found</p>
       )}
-      {modalData.visible && modalData.type === "delete" && <ModalWrapper />}
     </div>
   );
 }

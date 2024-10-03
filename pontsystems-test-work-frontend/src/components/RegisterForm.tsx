@@ -4,7 +4,10 @@ import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { openModal } from "../store/modalSlice";
+import { AppDispatch } from "../store/store";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
@@ -14,7 +17,6 @@ interface RegisterProps {
 function RegisterForm(props: RegisterProps) {
   const { type, incomingCitizenData } = props;
   const { id } = useParams<{ id: string }>();
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const {
     register,
     handleSubmit,
@@ -37,7 +39,7 @@ function RegisterForm(props: RegisterProps) {
   });
 
   const navigate = useNavigate();
-
+  const dispatch: AppDispatch = useDispatch();
   const { loading, error, fetchData } = useMockAxios();
 
   const gender = useWatch({ control, name: "gender" });
@@ -48,11 +50,10 @@ function RegisterForm(props: RegisterProps) {
     return Object.values(errors).map((error) => error.message);
   };
 
+  // TODO: delete this useEffect
   useEffect(() => {
     console.log("errors", getErrorMessages()[0]);
   }, [errors]);
-
-  console.log("errors", errorMessages);
 
   const validateDate = (value: string | Date) => {
     const selectedDate = new Date(value);
@@ -63,6 +64,7 @@ function RegisterForm(props: RegisterProps) {
     }
     return true;
   };
+
   const validateTaxIdentifier = (value: string) => {
     if (value.length !== 11) {
       return "Tax identifier must be exactly 11 characters long.";
@@ -75,9 +77,11 @@ function RegisterForm(props: RegisterProps) {
     }
     return true;
   };
+
   const isCreditEligibleEnabled =
     nationality?.toLowerCase() === "magyar" && taxIdentifier?.length >= 11;
 
+  // TODO: refactor this function
   const onSubmit = async (data: ICitizenFormData) => {
     const formattedDateOfBirth = data.dateOfBirth.toString();
     if (type === "register") {
@@ -110,9 +114,25 @@ function RegisterForm(props: RegisterProps) {
     }
   };
 
+  const openDirtyCheckModal = () => {
+    dispatch(
+      openModal({
+        title: "Warning",
+        message: "You have unsaved changes. Are you sure you want to leave?",
+        type: "dirtyCheck",
+        modalIdentifier: "formQuitCheck",
+      })
+    );
+  };
+
   const handleCloseButton = () => {
-    // NOTE isDirty not handle the
+    // NOTE isDirty not handle the initual values
     const dirtyFieldCount = Object.keys(dirtyFields).length;
+    if (dirtyFieldCount === 0) {
+      navigate("/dashboard");
+    } else {
+      openDirtyCheckModal();
+    }
 
     console.log("dirtyFields", dirtyFieldCount);
 

@@ -48,6 +48,7 @@ export function useMockAxios() {
 
   const deleteCitizen = (citizenId: string | undefined) => {
     let status: 400 | 200 | undefined;
+    console.log("deleteCitizen", citizenId);
     if (citizenId) {
       dispatch(removeCitizenReducer(Number(citizenId)));
       status = 200;
@@ -56,6 +57,7 @@ export function useMockAxios() {
     }
     return { status };
   };
+
   const editCitizen = (citizen: ICitizenRegistrationData | undefined) => {
     let status: 400 | 200 | undefined;
 
@@ -93,8 +95,8 @@ export function useMockAxios() {
     } else if (url === "/addCitizen" && method === "post") {
       status = addCitizen(payLoad?.citizen).status;
     } else if (url === "/deleteCitizen" && method === "delete") {
-      deleteCitizen(payLoad?.id);
-      status = 200;
+      console.log("deleteCitizenAxiois", payLoad);
+      status = deleteCitizen(payLoad).status;
     } else if (url === "/editCitizen" && method === "put") {
       status = editCitizen(payLoad?.citizen).status;
     }
