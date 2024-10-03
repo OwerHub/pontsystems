@@ -1,7 +1,13 @@
-:root{
-    box-sizing: border-box;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    background-color: blue;
+.appContent {
+  margin-top: 4rem;
+}
+
+.appContainer {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }

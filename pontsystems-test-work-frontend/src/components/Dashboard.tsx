@@ -55,7 +55,6 @@ function Dashboard() {
     }
   }, [dispatch]);
 
-  // TODO: extract fix columns to a separate file
   const columns = [
     ...dashbardFixColumns,
     {

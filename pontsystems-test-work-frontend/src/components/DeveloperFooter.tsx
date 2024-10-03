@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
+import "../styles/DeveloperFooter.css";
 
 function DeveloperFooter() {
   const [requestTest, setRequestTest] = useState<string>("");
@@ -8,6 +9,7 @@ function DeveloperFooter() {
   const [authenticateTest, setAuthenticateTest] = useState<boolean>(false);
   const { fetch, loading, error } = useAxios();
   const { logout, isAuthenticated } = useAuth();
+
   const testRequestHandler = async () => {
     const response = await fetch("/test", "GET");
     setRequestTest(response.data.message);
@@ -22,14 +24,15 @@ function DeveloperFooter() {
     setAuthenticateTest(isAuthenticated());
   };
 
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
+
   return (
-    <div
-      style={{
-        background: "rgba(0,0,0,0,.3)",
-      }}
-    >
-      <h2>developerFooter</h2>
-      <div style={{ display: "flex", justifyContent: "center", gap: "2rem" }}>
+    <div className="developerFooterContainer">
+      <div className="buttonContainer">
         <button onClick={() => logout()}>logout</button>
         <button onClick={() => testRequestHandler()}>
           {loading ? "Loading..." : "Test Request"}
@@ -41,9 +44,11 @@ function DeveloperFooter() {
           CheckAutentication
         </button>
       </div>
-      <div>
-        <div>test request: {requestTest}</div>
-        <div>{tokenTest ? "token OK" : "not get token"}</div>
+      <div className="testDisplayContainer">
+        <div className="testDisplay">test request: {requestTest}</div>
+        <div className="testDisplay">
+          {tokenTest ? "I recived" : "i didn't recived"} token
+        </div>
       </div>
     </div>
   );

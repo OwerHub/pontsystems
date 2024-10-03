@@ -1,3 +1,4 @@
+// dummy css, just for the sake of the example, next phase use TailwindCSS
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -20,55 +21,49 @@ import BoundaryError from "./components/BoundaryError";
 function App() {
   const modalData = useSelector((state: RootState) => state.modalData);
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
+    <div className="appContainer">
       <Router>
         <Header />
-        <ErrorBoundary FallbackComponent={BoundaryError}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <ProtectedRoute>
-                  <Register type="register" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/edit/:id"
-              element={
-                <ProtectedRoute>
-                  <Register type="edit" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/view/:id"
-              element={
-                <ProtectedRoute>
-                  <Register type="view" />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </ErrorBoundary>
+        <div className="appContent">
+          <ErrorBoundary FallbackComponent={BoundaryError}>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <ProtectedRoute>
+                    <Register type="register" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <Register type="edit" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/view/:id"
+                element={
+                  <ProtectedRoute>
+                    <Register type="view" />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </ErrorBoundary>
+        </div>
 
         {modalData.visible && <CheckModal />}
         <DeveloperFooter />

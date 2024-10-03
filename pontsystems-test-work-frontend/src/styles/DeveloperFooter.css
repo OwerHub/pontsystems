@@ -1,0 +1,38 @@
+.developerFooterContainer{
+ 
+    display: flex;
+    width: 100vw;
+    height: 8rem;
+    position: absolute;
+    padding:.5rem;
+    bottom: 0;
+    justify-content: space-around;
+}
+
+.buttonContainer{
+    display: flex;
+    gap:1rem;
+    height: 2rem;
+
+}
+button{
+    height: 2rem;
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.testDisplayContainer{
+    display: flex; 
+    gap: 1rem;
+    height: 3rem;
+    font-size: 130%;
+}
+
+.testDisplay{
+    display: flex;
+    align-items: center;
+    width: 15rem;
+}
+.testDisplay:nth-child(2){
+    justify-content: center;
+}
