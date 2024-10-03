@@ -25,7 +25,6 @@ function App() {
   return (
     <div
       style={{
-        background: "rgba(0, 0, 200, 0.1)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchCitizens } from "../store/citizenDataSlice";
 import { useEffect } from "react";
 import LoadingModal from "./LoadingModal";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 
 function Dashboard() {
   const {
@@ -110,6 +111,7 @@ function Dashboard() {
       title: "Credit Eligible",
       dataIndex: "creditEligible",
       key: "creditEligible",
+      render: (text: boolean) => (text ? <CheckOutlined /> : <CloseOutlined />),
     },
     {
       title: "Action",
@@ -142,6 +144,8 @@ function Dashboard() {
   if (isLoading) {
     return <LoadingModal />;
   }
+
+  console.log(citizens);
 
   return (
     <div
