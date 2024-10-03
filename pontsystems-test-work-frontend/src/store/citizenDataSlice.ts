@@ -141,7 +141,6 @@ const citizenSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(fetchCitizens.pending, (state) => {
-      console.log("fetchCitizens.pending");
       state.isLoading = true;
       state.error = null;
     });

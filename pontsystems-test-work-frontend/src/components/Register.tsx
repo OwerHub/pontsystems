@@ -3,6 +3,7 @@ import { ICitizenFormData } from "../types";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useEffect, useState } from "react";
 import RegisterFormfrom from "./RegisterForm";
+import LoadingModal from "./LoadingModal";
 interface RegisterProps {
   type: "register" | "edit" | "view";
 }
@@ -18,7 +19,6 @@ function Register(props: RegisterProps) {
 
   const getCitizenById = async (id: string | undefined) => {
     const response = await fetchData("/getCitizenById", "get", { id });
-    console.log("response", response);
 
     if (response.status === 200 && response?.selectedCitizen) {
       setIncomingCitizenData({
@@ -34,7 +34,7 @@ function Register(props: RegisterProps) {
   }, [id, type]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingModal />;
   }
 
   return (

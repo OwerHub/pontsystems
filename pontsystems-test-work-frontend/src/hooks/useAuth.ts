@@ -1,10 +1,11 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export const tokenName = 'pontSystems_token';
 
 const useAuth = () => {  
-
+  const navigate = useNavigate();
     const login = async (username: string, password: string) => {
         // TODO: check the options of use useAxios but beware the infinite re-renders
         try {
@@ -14,6 +15,7 @@ const useAuth = () => {
             });
             const token = response.data.token; 
             Cookies.set(tokenName, token, { secure: false }); 
+            navigate('/dashboard');
           } catch (error) {
             console.error('Login failed:', error);
           }

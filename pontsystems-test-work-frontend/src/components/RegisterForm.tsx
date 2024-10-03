@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openModal } from "../store/modalSlice";
 import { AppDispatch } from "../store/store";
+import LoadingModal from "./LoadingModal";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
@@ -33,7 +34,7 @@ function RegisterForm(props: RegisterProps) {
       dateOfBirth: incomingCitizenData?.dateOfBirth,
       nationality: incomingCitizenData?.nationality,
       taxIdentifier: incomingCitizenData?.taxIdentifier,
-      creditEligible: incomingCitizenData?.creditEligible,
+      creditEligible: incomingCitizenData?.creditEligible || false,
     },
   });
 
@@ -127,14 +128,9 @@ function RegisterForm(props: RegisterProps) {
     } else {
       openDirtyCheckModal();
     }
-
-    console.log("dirtyFields", dirtyFieldCount);
-
-    //navigate("/dashboard");
   };
 
   // TODO: check the opportunity to refactor the form componenet and iterate over the fields
-
   return (
     <div
       style={{ display: "flex", flexDirection: "column", background: "#f0f2" }}
@@ -206,6 +202,8 @@ function RegisterForm(props: RegisterProps) {
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
+        </div>
+        <div>
           {gender === "female" && (
             <div>
               <label>Maiden name</label>
@@ -266,9 +264,7 @@ function RegisterForm(props: RegisterProps) {
         <div>
           <label>Credit Eligible:</label>
           <input
-            {...register("creditEligible", {
-              required: "This field is required",
-            })}
+            {...register("creditEligible", {})}
             disabled={type === "view" || !isCreditEligibleEnabled}
             type="checkbox"
           />
@@ -278,7 +274,14 @@ function RegisterForm(props: RegisterProps) {
           <div style={{ color: "red" }}>{getErrorMessages()[0]}</div>
         )}
         <div
-          style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            width: "100%",
+            marginBottom: "2rem",
+          }}
         >
           {type !== "view" && <button type="submit">Save</button>}
           <button type="button" onClick={handleCloseButton}>
@@ -286,7 +289,7 @@ function RegisterForm(props: RegisterProps) {
           </button>
         </div>
       </form>
-      {loading && <div>Loading...</div>}
+      {loading && <LoadingModal />}
       {error && <div>Error: {error}</div>}
     </div>
   );

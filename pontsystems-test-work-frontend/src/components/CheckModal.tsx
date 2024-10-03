@@ -6,6 +6,7 @@ import { closeModal } from "../store/modalSlice";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 function CheckModal() {
   const modalData = useSelector((state: RootState) => state.modalData);
@@ -52,7 +53,7 @@ function CheckModal() {
         onOk={() => onOkHandler()}
         onCancel={() => dispatch(closeModal())}
       >
-        {loading && <div>Loading...</div>}
+        {loading && <LoadingIndicator iconSize={24} />}
         {!loading && !error && <div>{modalData.message}</div>}
         <div style={{ color: "red" }}>{error}</div>
       </Modal>

@@ -42,7 +42,6 @@ export function useMockAxios() {
 
   const deleteCitizen = (citizenId: string | undefined) => {
     let status: 400 | 200 | undefined;
-    console.log("deleteCitizen", citizenId);
     if (citizenId) {
       dispatch(removeCitizenReducer(Number(citizenId)));
       status = 200;

@@ -8,6 +8,7 @@ import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
 import { fetchCitizens } from "../store/citizenDataSlice";
 import { useEffect } from "react";
+import LoadingModal from "./LoadingModal";
 
 function Dashboard() {
   const {
@@ -20,7 +21,6 @@ function Dashboard() {
   const navigate = useNavigate();
 
   // NOTE: maybe the fixed colums should be extracted to a constant and imported from a shared file
-
   const handleDeleteButton = (citizen: ICitizenRegistrationData) => {
     const citizenName =
       citizen.firstName && citizen.lastName
@@ -140,16 +140,18 @@ function Dashboard() {
   ];
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingModal />;
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <h1>Dashboard</h1>
 
       <Button
         type="primary"
-        style={{ marginLeft: "auto" }}
+        style={{ marginBottom: "1rem", width: "5rem" }}
         onClick={() => navigate("/register")}
       >
         Add Citizen
