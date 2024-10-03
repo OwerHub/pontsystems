@@ -1,95 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { ICitizenRegistrationData } from "../types";
-// import dummyCitizens from './dummyCitizens.json';
+import dummyCitizens from './dummyCitizens.json';
 
-// TODO: listen, why cant read to json types corretly?
-//const dummyCitizensData = dummyCitizens as CitizenRegistrationData[];
-const dummyCitizensData = [
-  {
-    id: 1,
-    title: "Mr",
-    lastName: "Doe",
-    firstName: "John",
-    middleName: "Smith",
-    gender: "male",
-    maidenName: "",
-    placeOfBirth: "Budapest",
-    dateOfBirth: "1990-01-01",
-    nationality: "American",
-    taxIdentifier: "8A123456789",
-    creditEligible: true,
-  },
-  {
-    id: 2,
-    title: "Mr",
-    lastName: "jane",
-    firstName: "John",
-    middleName: "Smith",
-    gender: "female",
-    maidenName: "Orleans",
-    placeOfBirth: "Budapest",
-    dateOfBirth: "1990-01-01",
-    nationality: "Hungary",
-    taxIdentifier: "8A123456789",
-    creditEligible: true,
-  },
-  {
-    id: 3,
-    title: "Ms",
-    lastName: "Smith",
-    firstName: "Anna",
-    middleName: "Marie",
-    gender: "female",
-    maidenName: "Johnson",
-    placeOfBirth: "New York",
-    dateOfBirth: "1985-05-15",
-    nationality: "Hungary",
-    taxIdentifier: "8A987654321",
-    creditEligible: false,
-  },
-  {
-    id: 4,
-    title: "Dr",
-    lastName: "Brown",
-    firstName: "James",
-    middleName: "Edward",
-    gender: "male",
-    maidenName: "",
-    placeOfBirth: "Los Angeles",
-    dateOfBirth: "1978-11-23",
-    nationality: "American",
-    taxIdentifier: "8A123987654",
-    creditEligible: true,
-  },
-  {
-    id: 5,
-    title: "Mrs",
-    lastName: "Taylor",
-    firstName: "Emily",
-    middleName: "Rose",
-    gender: "female",
-    maidenName: "Davis",
-    placeOfBirth: "Chicago",
-    dateOfBirth: "1992-07-30",
-    nationality: "American",
-    taxIdentifier: "8A456123789",
-    creditEligible: true,
-  },
-  {
-    id: 6,
-    title: "Mr",
-    lastName: "Wilson",
-    firstName: "Michael",
-    middleName: "John",
-    gender: "male",
-    maidenName: "",
-    placeOfBirth: "Houston",
-    dateOfBirth: "1980-03-12",
-    nationality: "American",
-    taxIdentifier: "8A789456123",
-    creditEligible: false,
-  },
-] as ICitizenRegistrationData[];
 
 interface CitizenDataState {
   data: ICitizenRegistrationData[];
@@ -105,6 +17,8 @@ const initialState: CitizenDataState = {
   firstLoading: true,
 };
 
+const dummyCitizensData = dummyCitizens as ICitizenRegistrationData[];
+
 export const fetchCitizens = createAsyncThunk(
   "citizens/fetchCitizens",
   async () => {
@@ -114,8 +28,9 @@ export const fetchCitizens = createAsyncThunk(
     return mockCitizens;
   }
 );
-
+console.log(dummyCitizens)
 const citizenSlice = createSlice({
+
   name: "citizenData",
   initialState,
   reducers: {

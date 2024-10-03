@@ -132,10 +132,10 @@ function RegisterForm(props: RegisterProps) {
 
   // TODO: check the opportunity to refactor the form componenet and iterate over the fields
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", background: "#f0f2" }}
-    >
-      <h1>Register</h1>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <h1>
+        {type == "register" ? "Register" : type === "edit" ? "Edit" : "View"}
+      </h1>
       <form
         style={{
           display: "flex",

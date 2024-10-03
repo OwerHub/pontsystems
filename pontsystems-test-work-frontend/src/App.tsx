@@ -18,17 +18,13 @@ import CheckModal from "./components/CheckModal";
 import BoundaryError from "./components/BoundaryError";
 
 function App() {
-  // const [count, setCount] = useState(0)
-
   const modalData = useSelector((state: RootState) => state.modalData);
-
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // justifyContent: "center",
         width: "100vw",
         height: "100vh",
       }}

@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { Table, Space, Button } from "antd";
 import { deleteIcon, editIcon, viewIcon } from "../assets";
-// import { CitizenRegistrationData } from "../store/citizenDataSlice";
 import { openModal } from "../store/modalSlice";
 import { ICitizenRegistrationData } from "../types";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,7 @@ import { fetchCitizens } from "../store/citizenDataSlice";
 import { useEffect } from "react";
 import LoadingModal from "./LoadingModal";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import dashbardFixColumns from "../appData/dashboardFixColum.json";
 
 function Dashboard() {
   const {
@@ -57,56 +57,7 @@ function Dashboard() {
 
   // TODO: extract fix columns to a separate file
   const columns = [
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-    },
-    {
-      title: "Middle Name",
-      dataIndex: "middleName",
-      key: "middleName",
-    },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
-    },
-    {
-      title: "Maiden Name",
-      dataIndex: "maidenName",
-      key: "maidenName",
-    },
-    {
-      title: "Place of Birth",
-      dataIndex: "placeOfBirth",
-      key: "placeOfBirth",
-    },
-    {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
-    },
-    {
-      title: "Nationality",
-      dataIndex: "nationality",
-      key: "nationality",
-    },
-    {
-      title: "Tax Identifier",
-      dataIndex: "taxIdentifier",
-      key: "taxIdentifier",
-    },
+    ...dashbardFixColumns,
     {
       title: "Credit Eligible",
       dataIndex: "creditEligible",
