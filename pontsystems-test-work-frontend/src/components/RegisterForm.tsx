@@ -4,7 +4,7 @@ import { ICitizenFormData } from "../types";
 import { Divider } from "antd";
 import { useMockAxios } from "../hooks/useMockAxios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface RegisterProps {
   type: "register" | "edit" | "view";
@@ -14,18 +14,12 @@ interface RegisterProps {
 function RegisterForm(props: RegisterProps) {
   const { type, incomingCitizenData } = props;
   const { id } = useParams<{ id: string }>();
-
-  // const [initialData, setInitialData] = useState<ICitizenFormData | null>(null);
-  /*  const [incomingCitizenData, setIncomingCitizenData] =
-    useState<ICitizenFormData | null>(null); */
-
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const {
     register,
     handleSubmit,
     control,
-
-    // getValues,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm<ICitizenFormData>({
     defaultValues: {
       title: incomingCitizenData?.title,
@@ -50,6 +44,16 @@ function RegisterForm(props: RegisterProps) {
   const nationality = useWatch({ control, name: "nationality" });
   const taxIdentifier = useWatch({ control, name: "taxIdentifier" });
 
+  const getErrorMessages = () => {
+    return Object.values(errors).map((error) => error.message);
+  };
+
+  useEffect(() => {
+    console.log("errors", getErrorMessages()[0]);
+  }, [errors]);
+
+  console.log("errors", errorMessages);
+
   const validateDate = (value: string | Date) => {
     const selectedDate = new Date(value);
     const currentDate = new Date();
@@ -61,13 +65,13 @@ function RegisterForm(props: RegisterProps) {
   };
   const validateTaxIdentifier = (value: string) => {
     if (value.length !== 11) {
-      return "The field must be exactly 11 characters long.";
+      return "Tax identifier must be exactly 11 characters long.";
     }
     if (!value.startsWith("8")) {
-      return "The field must start with 8.";
+      return "Tax identifier must start with 8.";
     }
     if (!value.includes("2")) {
-      return "The field must contain at least one number 2.";
+      return "tax identifier must contain at least one number 2.";
     }
     return true;
   };
@@ -89,7 +93,6 @@ function RegisterForm(props: RegisterProps) {
       }
     }
     if (type === "edit") {
-      console.log("%ceditCitizen", "color: green");
       try {
         const response = await fetchData("/editCitizen", "put", {
           citizen: {
@@ -137,7 +140,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.title ? "red" : "initial" }}
             {...register("title", {
-              required: "This field is required",
+              required: "Title field is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -148,7 +151,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.firstName ? "red" : "initial" }}
             {...register("firstName", {
-              required: "This field is required",
+              required: "First name  is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -159,7 +162,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.lastName ? "red" : "initial" }}
             {...register("lastName", {
-              required: "This field is required",
+              required: "Last name is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -170,7 +173,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.middleName ? "red" : "initial" }}
             {...register("middleName", {
-              required: "This field is required",
+              required: "middleName is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -181,7 +184,7 @@ function RegisterForm(props: RegisterProps) {
           <label>Gender</label>
           <select
             {...register("gender", {
-              required: "This field is required",
+              required: "Gender is is required",
             })}
             disabled={type === "view"}
           >
@@ -191,14 +194,12 @@ function RegisterForm(props: RegisterProps) {
           </select>
           {gender === "female" && (
             <div>
-              <label>
-                Leánykori név:
-                <input
-                  {...register("maidenName")}
-                  type="text"
-                  disabled={type === "view"}
-                />
-              </label>
+              <label>Maiden name</label>
+              <input
+                {...register("maidenName")}
+                type="text"
+                disabled={type === "view"}
+              />
             </div>
           )}
         </div>
@@ -207,7 +208,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.placeOfBirth ? "red" : "initial" }}
             {...register("placeOfBirth", {
-              required: "This field is required",
+              required: "Place of birth is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -218,7 +219,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.dateOfBirth ? "red" : "initial" }}
             {...register("dateOfBirth", {
-              required: "This field is required",
+              required: "Date of Birth is required",
               validate: validateDate,
             })}
             disabled={type === "view"}
@@ -230,7 +231,7 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.nationality ? "red" : "initial" }}
             {...register("nationality", {
-              required: "This field is required",
+              required: "Nationality is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -241,8 +242,8 @@ function RegisterForm(props: RegisterProps) {
           <input
             style={{ borderColor: errors.taxIdentifier ? "red" : "initial" }}
             {...register("taxIdentifier", {
-              required: "This field is required",
               validate: validateTaxIdentifier,
+              required: "Tax Identifier is required",
             })}
             disabled={type === "view"}
             type="text"
@@ -253,13 +254,15 @@ function RegisterForm(props: RegisterProps) {
           <input
             {...register("creditEligible", {
               required: "This field is required",
-              disabled: !isCreditEligibleEnabled,
             })}
-            disabled={type === "view"}
+            disabled={type === "view" || !isCreditEligibleEnabled}
             type="checkbox"
           />
         </div>
         <Divider />
+        {!!Object.keys(errors).length && (
+          <div style={{ color: "red" }}>{getErrorMessages()[0]}</div>
+        )}
         <div
           style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
         >
